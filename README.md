@@ -1,2 +1,3 @@
-# php-edtf
-A VERY simple library of helpers for dealing with EDTF dates
+# php-EDTF
+
+[![Build Status](https://travis-ci.org/computerminds/php-edtf.svg?branch=master)](https://travis-ci.org/computerminds/php-edtf)
