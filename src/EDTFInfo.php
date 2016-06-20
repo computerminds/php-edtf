@@ -11,7 +11,9 @@ class EDTFInfo implements EDTFInfoInterface {
   protected $apiData;
   protected $apiDataJson;
 
-  protected $valid;
+  protected $valid = FALSE;
+  protected $min;
+  protected $max;
 
   /**
    * EDTFInfo constructor.
@@ -26,15 +28,25 @@ class EDTFInfo implements EDTFInfoInterface {
   protected function ensureAPIData() {
     if (!isset($this->apiData)) {
       $client = new GuzzleHttp\Client();
-      $res = $client->request('GET', 'http://digital2.library.unt.edu/edtf/isValid.json', array(
-        'query' => array(
-          'date' => $this->dateString,
-        ),
-      ));
-      if ($res->getStatusCode() == 200) {
+      try {
+        $res = $client->request('GET', 'http://edtf.herokuapp.com/', array(
+          'query' => array(
+            'date' => $this->dateString,
+          ),
+        ));
+      }
+      catch (GuzzleHttp\Exception\ServerException $guzzle_exception) {
+
+      }
+      catch (GuzzleHttp\Exception\ClientException $guzzle_exception) {
+
+      }
+      if (isset($res) && $res->getStatusCode() == 200) {
+        $this->valid = TRUE;
         $this->apiData = $res->getBody();
         $this->apiDataJson = json_decode($this->apiData, TRUE);
-        $this->valid = $this->apiDataJson['validEDTF'] === TRUE;
+        $this->min = new \DateTime($this->apiDataJson['min']);
+        $this->max = new \DateTime($this->apiDataJson['max']);
       }
     }
   }
@@ -44,12 +56,21 @@ class EDTFInfo implements EDTFInfoInterface {
     return $this->valid;
   }
 
+  /**
+   * @return \DateTime;
+   */
   public function getMin() {
+    $this->ensureAPIData();
+    return $this->min;
 
   }
 
+  /**
+   * @return \DateTime;
+   */
   public function getMax() {
-
+    $this->ensureAPIData();
+    return $this->max;
   }
 
 
