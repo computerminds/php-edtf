@@ -4,6 +4,13 @@ namespace ComputerMinds\EDTF;
 
 use GuzzleHttp;
 
+/**
+ * Validate and return basic information about EDTF date strings.
+ *
+ * Internally we use a web service to handle date parsing etc.
+ *
+ * @package ComputerMinds\EDTF
+ */
 class EDTFInfo implements EDTFInfoInterface {
 
   protected $dateString;
@@ -20,11 +27,19 @@ class EDTFInfo implements EDTFInfoInterface {
    *
    * @param $dateString
    *   The date string to return information about.
+   * @param bool $lazy_load
+   *   Specify if the date about the date should be lazy loaded.
    */
-  public function __construct($dateString) {
+  public function __construct($dateString, $lazy_load = TRUE) {
     $this->dateString = $dateString;
+    if (!$lazy_load) {
+      $this->ensureAPIData();
+    }
   }
 
+  /**
+   * Get the data about the date string from the API.
+   */
   protected function ensureAPIData() {
     if (!isset($this->apiData)) {
       $client = new GuzzleHttp\Client();
@@ -51,13 +66,20 @@ class EDTFInfo implements EDTFInfoInterface {
     }
   }
 
+  /**
+   * Return the validity of the EDTF date string.
+   *
+   * @return bool
+   */
   public function isValid() {
     $this->ensureAPIData();
     return $this->valid;
   }
 
   /**
-   * @return \DateTime;
+   * Get the earliest date that this instance could represent.
+   *
+   * @return \DateTime
    */
   public function getMin() {
     $this->ensureAPIData();
@@ -66,12 +88,12 @@ class EDTFInfo implements EDTFInfoInterface {
   }
 
   /**
-   * @return \DateTime;
+   * Get the latest date that this instance could represent.
+   *
+   * @return \DateTime
    */
   public function getMax() {
     $this->ensureAPIData();
     return $this->max;
   }
-
-
 }
