@@ -60,8 +60,19 @@ class EDTFInfo implements EDTFInfoInterface {
         $this->valid = TRUE;
         $this->apiData = $res->getBody();
         $this->apiDataJson = json_decode($this->apiData, TRUE);
-        $this->min = new \DateTime($this->apiDataJson['min']);
-        $this->max = new \DateTime($this->apiDataJson['max']);
+        $min = $this->apiDataJson['min'];
+        if (strpos($min, '-') === 0) {
+          // JS adds some leading zeros to negative dates.
+         $min = preg_replace('#^-00#', '-', $min);
+        }
+        $this->min = new \DateTime($min);
+
+        $max = $this->apiDataJson['max'];
+        if (strpos($max, '-') === 0) {
+          // JS adds some leading zeros to negative dates.
+          $max = preg_replace('#^-00#', '-', $max);
+        }
+        $this->max = new \DateTime($max);
       }
     }
   }

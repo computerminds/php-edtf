@@ -34,6 +34,11 @@ class EDTFInfoTest extends PHPUnit_Framework_TestCase {
     $dates = array();
 
     $valid_dates = array(
+
+      // Test some very early dates
+      array('0250-01-01', '250-01-01T00:00:00.000Z', '250-01-01T23:59:59.999Z'),
+      array('-0999-01-01', '-0999-01-01T00:00:00.000Z', '-0999-01-01T23:59:59.999Z'),
+
       // 5.1.1 Date
       array('1970-01-01', '1970-01-01T00:00:00.000Z', '1970-01-01T23:59:59.999Z'),
 
