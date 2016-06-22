@@ -5,8 +5,8 @@ namespace ComputerMinds\EDTF;
 /**
  * Base interface for EDFFInfo.
  *
- * This provides the bare bones of an interface for interacting very simply
- * with EDTF dates.
+ * This provides the bare bones of an interface for interacting very simply with
+ * EDTF dates.
  *
  * @package ComputerMinds\EDTF
  */
