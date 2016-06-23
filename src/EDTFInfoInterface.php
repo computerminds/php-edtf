@@ -10,14 +10,7 @@ namespace ComputerMinds\EDTF;
  *
  * @package ComputerMinds\EDTF
  */
-interface EDTFInfoInterface {
-  /**
-   * Determine if the EDTF string given to this instance is valid.
-   *
-   * @return bool
-   *   TRUE if the date string can be parsed as valid, FALSE otherwise.
-   */
-  public function isValid();
+interface EDTFInfoInterface extends EDTFInfoValidationInterface {
 
   /**
    * Get the earliest date that this instance could represent.
