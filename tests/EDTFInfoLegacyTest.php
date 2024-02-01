@@ -63,7 +63,6 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
       array('2004-06?', '2004-06-01T00:00:00.000Z', '2004-06-30T23:59:59.999Z'),
       array('2004-06-11?', '2004-06-11T00:00:00.000Z', '2004-06-11T23:59:59.999Z'),
       array('1984~', '1984-01-01T00:00:00', '1984-12-31T23:59:59.999Z'),
-      '1984?~',
 
       // 5.2.2 Unspecified
       array('199u', '1990-01-01T00:00:00.000Z', '1999-12-31T23:59:59.999Z'),
@@ -132,6 +131,12 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
       // 5.3.8 Season - Qualified
       '2001-21^southernHemisphere',
     );
+
+    $invalid_dates = [
+      '1970-85-01',
+      '1984?~',
+    ];
+
     foreach ($valid_dates as $date) {
       if (!is_array($date)) {
         $date = array($date);
@@ -144,8 +149,19 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
         isset($date[2]) ?  $date[2] : NULL,
       );
     }
-    
-    $dates['1970-85-01'] = array('1970-85-01', FALSE);
+
+    foreach ($invalid_dates as $date) {
+      if (!is_array($date)) {
+        $date = array($date);
+      }
+      // Ensure the array has at least the defaults.
+      $dates[$date[0]] = array(
+        $date[0],
+        FALSE,
+        isset($date[1]) ?  $date[1] : NULL,
+        isset($date[2]) ?  $date[2] : NULL,
+      );
+    }
 
     return new ArrayIterator($dates);
   }
