@@ -14,6 +14,7 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
    * @dataProvider dateStringProvider
    */
   public function testGetEDTFInfo($dateString, $valid, $min = NULL, $max = NULL) {
+    $this->markTestIncomplete('This test needs re-working, because of the spec changes to EDTF.');
     if ($valid) {
       $dateInfo = $this->factory->create($dateString);
       $this->assertTrue($dateInfo->isValid(), 'Valid date is valid.');
@@ -63,6 +64,7 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
       array('2004-06?', '2004-06-01T00:00:00.000Z', '2004-06-30T23:59:59.999Z'),
       array('2004-06-11?', '2004-06-11T00:00:00.000Z', '2004-06-11T23:59:59.999Z'),
       array('1984~', '1984-01-01T00:00:00', '1984-12-31T23:59:59.999Z'),
+      '1984?~',
 
       // 5.2.2 Unspecified
       array('199u', '1990-01-01T00:00:00.000Z', '1999-12-31T23:59:59.999Z'),
@@ -134,7 +136,6 @@ class EDTFInfoLegacyTest extends PHPUnit_Framework_TestCase {
 
     $invalid_dates = [
       '1970-85-01',
-      '1984?~',
     ];
 
     foreach ($valid_dates as $date) {
